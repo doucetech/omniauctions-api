@@ -28,6 +28,6 @@ COPY --chown=omni_usr:omni_usr . /omniapi/
 
 USER omni_usr
 
-EXPOSE 9000
+EXPOSE 8001
 
 CMD ["php-fpm"]
