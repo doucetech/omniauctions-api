@@ -9,10 +9,6 @@ RUN apt-get update && \
     docker-php-ext-install gd pdo pdo_mysql && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# RUN pecl install -o -f redis \
-#     && rm -rf /tmp/pear \
-#     && docker-php-ext-enable redis
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY composer.json composer.lock ./
@@ -25,14 +21,12 @@ RUN chmod -R 777 /omniapi/storage
 
 ENTRYPOINT ["./entrypoint.sh"]
 
-RUN groupadd -g 1000 tmpnp_usr
-RUN useradd -u 1000 -ms /bin/bash -g tmpnp_usr tmpnp_usr
+RUN groupadd -g 1000 omni_usr
+RUN useradd -u 1000 -ms /bin/bash -g omni_usr omni_usr
 
-COPY --chown=tmpnp_usr:tmpnp_usr . /omniapi/
+COPY --chown=omni_usr:omni_usr . /omniapi/
 
-COPY package.json package-lock.json ./
-
-USER tmpnp_usr
+USER omni_usr
 
 EXPOSE 9000
 
