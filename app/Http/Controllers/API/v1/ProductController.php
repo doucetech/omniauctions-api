@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\ProductRepository;
+use App\Repositories\Products\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -28,10 +28,10 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    public function addImage(Request $request, $productId)
+    public function addImages(Request $request, $productId)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming image upload
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $product = $this->productRepository->findById($productId);
@@ -40,10 +40,12 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        $imagePath = $request->file('image')->store('product_images'); // Store the image
+        foreach ($request->file('images') as $image) {
+            $imagePath = $image->store('product_images');
 
-        $this->productRepository->addImage($product, ['path' => $imagePath]);
+            $this->productRepository->addImage($product, ['path' => $imagePath]);
+        }
 
-        return response()->json(['message' => 'Image added successfully'], 201);
+        return response()->json(['message' => 'Images added successfully'], 201);
     }
 }

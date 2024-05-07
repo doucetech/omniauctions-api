@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Products;
 
-use App\Interfaces\ProductRepositoryInterface;
+use App\Interfaces\Products\ProductRepositoryInterface;
 use App\Models\Product;
 
 class ProductRepository implements ProductRepositoryInterface
