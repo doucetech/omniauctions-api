@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\v1\BidController;
+use App\Http\Controllers\API\v1\BidController;
 use App\Http\Controllers\API\v1\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
