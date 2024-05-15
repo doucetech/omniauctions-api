@@ -9,11 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'status'];
+    protected $fillable = ['name', 'description', 'price', 'status', 'user_id'];
 
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function setStatusAttribute($value)

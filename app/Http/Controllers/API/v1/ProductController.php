@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use App\Repositories\Products\ProductRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -15,6 +16,18 @@ class ProductController extends Controller
         $this->productRepository = $productRepository;
     }
 
+    public function index()
+    {
+        $products = $this->productRepository->allProducts();
+        return response()->json($products, 200);
+    }
+
+    public function show($id)
+    {
+        $product = $this->productRepository->findById($id);
+        return response()->json($product, 200);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -23,7 +36,10 @@ class ProductController extends Controller
             'price' => 'required|numeric',
         ]);
 
-        $product = $this->productRepository->create($request->all());
+        $data = $request->all();
+        $data['user_id'] = Auth::id();
+
+        $product = $this->productRepository->create($data);
 
         return response()->json($product, 201);
     }

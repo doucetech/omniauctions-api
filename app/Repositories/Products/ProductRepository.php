@@ -19,6 +19,13 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function findById($id)
     {
-        return Product::find($id);
+        return Product::with(['bids' => function ($query) {
+            $query->latest()->first();
+        }])->find($id);
+    }
+
+    public function allProducts()
+    {
+        return Product::orderBy('created_at', 'desc')->paginate(10);
     }
 }
