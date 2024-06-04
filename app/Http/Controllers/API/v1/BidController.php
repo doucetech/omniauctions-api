@@ -65,7 +65,7 @@ class BidController extends Controller
 
     private function generateNextBids($currentAmount)
     {
-        $increments = [5, 10, 15, 20, 25];
+        $increments = [5];
         $nextBids = [];
 
         foreach ($increments as $increment) {
