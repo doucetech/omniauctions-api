@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Repositories\SubscriptionRepository;
+use App\Repositories\Users\SubscriptionRepository;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,6 +30,10 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'phone' => ['required', 'string', 'max:12'],
+            'identification' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -37,10 +41,16 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'identification' => $request->identification,
+            'city' => $request->city,
             'password' => Hash::make($request->password),
         ]);
 
-        $this->subscriptionRepository->createTrialSubscription($user->id);
+        if ($user) {
+            $this->subscriptionRepository->createTrialSubscription($user->id);
+        }
 
         event(new Registered($user));
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Users;
 
-use App\Interfaces\Users\SubscriptionInterface;
+use App\Interfaces\Users\SubscriptionRepositoryInterface;
 use App\Models\Subscription;
 use Carbon\Carbon;
 
-class SubscriptionRepository implements SubscriptionInterface
+class SubscriptionRepository implements SubscriptionRepositoryInterface
 {
     public function createTrialSubscription($userId)
     {

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Repositories\SubscriptionRepository;
+use App\Http\Controllers\Controller;
+use App\Repositories\Users\SubscriptionRepository;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -33,6 +34,13 @@ class SubscriptionController extends Controller
         ]);
 
         $sub = $this->subscriptionRepo->renewSubscription($validatedData, $id);
+
+        return response()->json($sub, 201);
+    }
+
+    public function trial()
+    {
+        $sub = $this->subscriptionRepo->createTrialSubscription(1);
 
         return response()->json($sub, 201);
     }

@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Users;
 
-interface SubscriptionInterface
+interface SubscriptionRepositoryInterface
 {
     public function createTrialSubscription($userId);
 
