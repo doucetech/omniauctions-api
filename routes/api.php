@@ -11,6 +11,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/my-products', [ProductController::class, 'userProducts']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::middleware(['auth', 'check.subscription'])->group(function () {
         Route::post('/products', [ProductController::class, 'store']);

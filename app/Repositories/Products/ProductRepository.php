@@ -28,4 +28,9 @@ class ProductRepository implements ProductRepositoryInterface
     {
         return Product::orderBy('created_at', 'desc')->paginate(10);
     }
+
+    public function getUserProducts($userId)
+    {
+        return Product::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
+    }
 }

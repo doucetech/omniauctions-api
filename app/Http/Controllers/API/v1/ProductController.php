@@ -22,6 +22,19 @@ class ProductController extends Controller
         return response()->json($products, 200);
     }
 
+    public function userProducts()
+    {
+
+        $user = Auth::guard('sanctum')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $products = $this->productRepository->getUserProducts($user->id);
+
+        return response()->json($products, 200);
+    }
+
     public function show($id)
     {
         $product = $this->productRepository->findById($id);
