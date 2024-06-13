@@ -35,6 +35,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         $data['slug'] = $slug;
+        $data['status'] = "open";
 
         return Product::create($data);
     }
