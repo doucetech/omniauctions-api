@@ -72,6 +72,10 @@ class BidController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
+        if ($product->user_id === $request->user_id) {
+            return response()->json(['message' => 'You cannot bid on your own product'], 403);
+        }
+
         $highestBid = $this->bidRepository->getHighestBid($product);
         $currentAmount = $highestBid ? $highestBid->amount : $product->price;
 
