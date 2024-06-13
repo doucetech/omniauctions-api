@@ -49,6 +49,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'end_time_option' => 'required|in:1,2,3',
             'featured_image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
+            'location' => 'required|string',
         ]);
 
         $data = $request->all();

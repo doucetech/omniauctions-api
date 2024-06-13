@@ -17,4 +17,14 @@ class BidRepository implements BidRepositoryInterface
     {
         return $product->bids()->orderBy('amount', 'desc')->first();
     }
+
+    public function myBids($userId)
+    {
+        $bids = Bid::where('user_id', $userId)
+            ->with('product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return $bids;
+    }
 }

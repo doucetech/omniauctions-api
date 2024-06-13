@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Bids\BidRepository;
 use App\Repositories\Products\ProductRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BidController extends Controller
 {
@@ -16,6 +17,19 @@ class BidController extends Controller
     {
         $this->bidRepository = $bidRepository;
         $this->productRepository = $productRepository;
+    }
+
+    public function userBids()
+    {
+
+        $user = Auth::guard('sanctum')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $bids = $this->bidRepository->myBids($user->id);
+
+        return response()->json($bids, 200);
     }
 
     public function getNextBidOptions($productId)
