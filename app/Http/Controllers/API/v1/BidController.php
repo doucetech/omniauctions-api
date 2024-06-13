@@ -32,6 +32,19 @@ class BidController extends Controller
         return response()->json($bids, 200);
     }
 
+    public function pastBids()
+    {
+
+        $user = Auth::guard('sanctum')->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        $bids = $this->bidRepository->pastBids($user->id);
+
+        return response()->json($bids, 200);
+    }
+
     public function getNextBidOptions($productId)
     {
         $product = $this->productRepository->findById($productId);

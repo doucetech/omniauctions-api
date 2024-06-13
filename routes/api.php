@@ -12,7 +12,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/my-products', [ProductController::class, 'userProducts']);
-    Route::get('/bids', [BidController::class, 'userBids']);
+    Route::get('/my-bids', [BidController::class, 'userBids']);
+    Route::get('/past-bids', [BidController::class, 'pastBids']);
 
     Route::get('/products/{id}', [ProductController::class, 'show']);
     Route::middleware(['auth', 'check.subscription'])->group(function () {
