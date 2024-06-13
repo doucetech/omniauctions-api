@@ -47,10 +47,15 @@ class ProductController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|numeric',
+            'end_time_option' => 'required|in:1,2,3',
+            'featured_image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ]);
 
         $data = $request->all();
         $data['user_id'] = Auth::id();
+        $data['featured_image'] = $request->file('featured_image');
+        $endTime = now()->addDays($request->end_time_option);
+        $data['end_time'] = $endTime;
 
         $product = $this->productRepository->create($data);
 
@@ -60,7 +65,7 @@ class ProductController extends Controller
     public function addImages(Request $request, $productId)
     {
         $request->validate([
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ]);
 
         $product = $this->productRepository->findById($productId);
@@ -69,12 +74,10 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        foreach ($request->file('images') as $image) {
-            $imagePath = $image->store('product_images');
-
-            $this->productRepository->addImage($product, ['path' => $imagePath]);
-        }
+        $images = $request->file('images');
+        $this->productRepository->addImage($product, $images);
 
         return response()->json(['message' => 'Images added successfully'], 201);
     }
+
 }

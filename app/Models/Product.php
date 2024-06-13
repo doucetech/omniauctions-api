@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'status', 'user_id'];
+    protected $fillable = ['name', 'description', 'price', 'slug', 'end_time', 'status', 'featured_image', 'user_id'];
 
     public function images()
     {
@@ -29,4 +29,5 @@ class Product extends Model
     {
         $this->attributes['status'] = in_array($value, ProductStatus::getStatuses()) ? $value : ProductStatus::DRAFT;
     }
+
 }
