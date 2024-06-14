@@ -72,7 +72,9 @@ class BidController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        if ($product->user_id === $request->user_id) {
+        $user = Auth::guard('sanctum')->user();
+
+        if ($product->user_id === $user->id) {
             return response()->json(['message' => 'You cannot bid on your own product'], 403);
         }
 
@@ -87,7 +89,7 @@ class BidController extends Controller
 
         $bid = $this->bidRepository->placeBid([
             'product_id' => $productId,
-            'user_id' => $request->user_id,
+            'user_id' => $user->id,
             'amount' => $request->amount,
         ]);
 
