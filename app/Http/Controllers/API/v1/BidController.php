@@ -63,7 +63,6 @@ class BidController extends Controller
     public function placeBid(Request $request, $productId)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'amount' => 'required|numeric|min:0.01',
         ]);
 

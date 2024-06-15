@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Products\ProductRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,17 +51,24 @@ class ProductController extends Controller
             'end_time_option' => 'required|in:1,2,3',
             'featured_image' => 'required|image|mimes:jpeg,png,jpg|max:1024',
             'location' => 'required|string',
+            'gallery_images' => 'required|array|min:3',
+            'gallery_images.*' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ]);
 
         $data = $request->all();
         $data['user_id'] = Auth::id();
         $data['featured_image'] = $request->file('featured_image');
+        $data['gallery_images'] = $request->file('gallery_images');
+
         $endTime = now()->addDays($request->end_time_option);
         $data['end_time'] = $endTime;
 
-        $product = $this->productRepository->create($data);
-
-        return response()->json($product, 201);
+        try {
+            $product = $this->productRepository->create($data);
+            return response()->json($product, 201);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function addImages(Request $request, $productId)
