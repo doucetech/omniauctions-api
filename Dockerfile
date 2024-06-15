@@ -21,9 +21,6 @@ RUN chmod -R 777 /omniapi/storage
 
 ENTRYPOINT ["./entrypoint.sh"]
 
-RUN groupadd -g 1000 www-data
-RUN useradd -u 1000 -ms /bin/bash -g www-data www-data
-
 COPY --chown=www-data:www-data . /omniapi/
 
 USER www-data
