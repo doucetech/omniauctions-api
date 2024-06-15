@@ -21,7 +21,7 @@ RUN chmod -R 777 /omniapi/storage
 
 ENTRYPOINT ["./entrypoint.sh"]
 
-COPY --chown=www-data:www-data . /omniapi/
+RUN chown -R www-data:www-data /omniapi
 
 USER www-data
 
