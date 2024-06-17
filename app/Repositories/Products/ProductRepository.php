@@ -6,7 +6,6 @@ use App\Interfaces\Products\ProductRepositoryInterface;
 use App\Models\Product;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class ProductRepository implements ProductRepositoryInterface
@@ -27,15 +26,11 @@ class ProductRepository implements ProductRepositoryInterface
                 $image = $data['featured_image'];
                 $year = date('Y');
                 $month = date('m');
-                $directory = public_path("images/{$year}/{$month}");
-
-                if (!File::exists($directory)) {
-                    File::makeDirectory($directory, 0755, true);
-                }
+                $directory = "images/{$year}/{$month}";
 
                 $imageName = $slug . '-' . time() . '.' . $image->getClientOriginalExtension();
-                $image->move($directory, $imageName);
-                $data['featured_image'] = "{$year}/{$month}/" . $imageName;
+                $image->storeAs($directory, $imageName, 'public');
+                $data['featured_image'] = "{$directory}/" . $imageName;
             }
 
             $data['slug'] = $slug;
@@ -46,8 +41,9 @@ class ProductRepository implements ProductRepositoryInterface
             if (isset($data['gallery_images']) && count($data['gallery_images']) >= 3) {
                 foreach ($data['gallery_images'] as $image) {
                     $imageName = time() . '-' . $image->getClientOriginalName();
-                    $image->move(public_path('gallery'), $imageName);
-                    $product->images()->create(['path' => 'gallery/' . $imageName]);
+                    $directory = "gallery/{$year}/{$month}";
+                    $image->storeAs($directory, $imageName, 'public');
+                    $product->images()->create(['path' => "{$directory}/" . $imageName]);
                 }
             } else {
                 throw new Exception('At least 3 gallery images are required.');

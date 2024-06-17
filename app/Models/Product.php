@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Enums\ProductStatus;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -28,6 +29,11 @@ class Product extends Model
     public function setStatusAttribute($value)
     {
         $this->attributes['status'] = in_array($value, ProductStatus::getStatuses()) ? $value : ProductStatus::DRAFT;
+    }
+
+    public function getFeaturedImageAttribute($value)
+    {
+        return Storage::url($value);
     }
 
 }
